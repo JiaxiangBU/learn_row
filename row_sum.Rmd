@@ -1,0 +1,70 @@
+---
+output: github_document
+title: 'row wise summary'
+author: 'Jiaxiang Li'
+date: '`r Sys.Date()`'
+---
+
+
+参考[github](https://github.com/jennybc/row-oriented-workflows/blob/master/ex09_row-summaries.md)
+
+按行相加其实使用的是`purrr:pmap`函数。
+
+```{r}
+library(tidyverse)
+
+df <- tribble(
+  ~ name, ~ t1, ~t2, ~t3,
+  "Abby",    1,   2,   3,
+  "Bess",    4,   5,   6,
+  "Carl",    7,   8,   9
+)
+```
+
+```{r}
+df %>% 
+    mutate(sum = pmap_dbl(list(t1,t2,t3),sum))
+```
+
+简单的写法
+
+```{r}
+df %>% 
+    mutate(sum = pmap_dbl(select_if(.,is.numeric),sum))
+```
+
+`pmap_dbl(...,sum)`=`rowSums`
+
+```{r}
+df %>% 
+    mutate(sum = rowSums(select_if(.,is.numeric)))
+```
+
+`select`函数进行扩展
+
+```{r}
+df %>%
+    mutate(sum = 
+               pmap_dbl(
+                   select(.
+                          ,starts_with('t')
+                          )
+                   ,sum
+                   )
+           )    
+```
+
+
+```{r}
+df %>%
+    mutate(sum = 
+               pmap_dbl(
+                   select(.
+                          ,starts_with('t')
+                          )
+                   ,lift_vd(mean)
+                   )
+           )    
+```
+
+`mean()`是向量化的，因此`pmap_dbl`对其产生报错，这里`lift_vd`将其去向量化。
