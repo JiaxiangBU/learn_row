@@ -1,0 +1,18 @@
+---
+output: github_document
+title: 'enframe'
+author: 'Jiaxiang Li'
+date: '`r Sys.Date()`'
+---
+
+如果直接`unnest`那么`value`之前就没有名字
+
+```{r}
+iris %>%
+    group_by(Species) %>%
+    summarise(pl_qtile = list(quantile(Petal.Length, c(0.25, 0.5, 0.75)))) %>%
+    # mutate(pl_qtile = map(pl_qtile, enframe, name = "quantile")) %>%
+    unnest() %>%
+    mutate(quantile = factor(quantile))
+```
+

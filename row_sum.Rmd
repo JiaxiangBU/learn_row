@@ -68,3 +68,14 @@ df %>%
 ```
 
 `mean()`是向量化的，因此`pmap_dbl`对其产生报错，这里`lift_vd`将其去向量化。
+
+`fun`换成其他函数
+参考[github](https://github.com/jennybc/row-oriented-workflows/blob/master/ex06_runif-via-pmap.md)
+
+```{r}
+df %>%
+  set_names(
+    'name','n','min','max'
+  ) %>% 
+  mutate(data = pmap(select(., -name), runif))
+```
