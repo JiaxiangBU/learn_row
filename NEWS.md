@@ -2,6 +2,7 @@
 
 1. add news
 1. move old records in readme here
+1. knit all
 
 
 ### 2019-02-26 13:53:49

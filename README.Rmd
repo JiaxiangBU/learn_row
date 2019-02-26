@@ -10,3 +10,8 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
+
+```{r}
+add2md::get_toc(".")
+```
+

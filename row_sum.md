@@ -1,7 +1,7 @@
 row wise summary
 ================
 Jiaxiang Li
-2018-12-19
+2019-02-26
 
 参考[github](https://github.com/jennybc/row-oriented-workflows/blob/master/ex09_row-summaries.md)
 
@@ -11,14 +11,14 @@ Jiaxiang Li
 library(tidyverse)
 ```
 
-    ## -- Attaching packages --------------------------------------------------------------------- tidyverse 1.2.1 --
+    ## -- Attaching packages -------------------------------------------------------------------------------- tidyverse 1.2.1 --
 
     ## √ ggplot2 3.1.0     √ purrr   0.2.5
-    ## √ tibble  1.4.2     √ dplyr   0.7.8
+    ## √ tibble  2.0.1     √ dplyr   0.7.8
     ## √ tidyr   0.8.2     √ stringr 1.3.1
-    ## √ readr   1.2.1     √ forcats 0.3.0
+    ## √ readr   1.3.1     √ forcats 0.3.0
 
-    ## -- Conflicts ------------------------------------------------------------------------ tidyverse_conflicts() --
+    ## -- Conflicts ----------------------------------------------------------------------------------- tidyverse_conflicts() --
     ## x dplyr::filter() masks stats::filter()
     ## x dplyr::lag()    masks stats::lag()
 
@@ -112,3 +112,21 @@ df %>%
     ## 3 Carl      7     8     9     8
 
 `mean()`是向量化的，因此`pmap_dbl`对其产生报错，这里`lift_vd`将其去向量化。
+
+`fun`换成其他函数
+参考[github](https://github.com/jennybc/row-oriented-workflows/blob/master/ex06_runif-via-pmap.md)
+
+``` r
+df %>%
+  set_names(
+    'name','n','min','max'
+  ) %>% 
+  mutate(data = pmap(select(., -name), runif))
+```
+
+    ## # A tibble: 3 x 5
+    ##   name      n   min   max data     
+    ##   <chr> <dbl> <dbl> <dbl> <list>   
+    ## 1 Abby      1     2     3 <dbl [1]>
+    ## 2 Bess      4     5     6 <dbl [4]>
+    ## 3 Carl      7     8     9 <dbl [7]>
